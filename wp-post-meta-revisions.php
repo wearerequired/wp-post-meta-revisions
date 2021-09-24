@@ -94,6 +94,18 @@ class WP_Post_Meta_Revisioning {
 			// Default the meta value from the $_POST variable that matches the meta key.
 			$meta_value = isset( $posted_data[ $meta_key ] ) ? wp_unslash( $posted_data[ $meta_key ] ) : NULL;
 
+			/**
+			 * Filter the meta value to be revisioned.
+			 *
+			 * @since 2.0.0
+			 *
+			 * @param string $meta_value   The meta value from the $_POST variable.
+			 * @param string $meta_key     The meta key from the wp_post_revision_meta_keys filter.
+			 * @param object $new_autosave The new post being autosaved.
+			 * @param array  $posted_data  The values from the $_POST variable.
+			 */
+			$meta_value = apply_filters( 'wp_post_revision_autosave_meta_value', $meta_value, $meta_key, $new_autosave, $posted_data );
+
 			// Find out if meta key is single/unqiue.
 			$registered_meta_keys = get_registered_meta_keys( 'post' );
 			$is_single = isset( $registered_meta_keys[ $meta_key ] ) ? $registered_meta_keys[ $meta_key ][ 'single' ] : false;
